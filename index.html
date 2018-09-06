@@ -17,10 +17,11 @@
 <body>
     <div class="container-fluid bg-dark py-2">
         <h1 class="text-white">Dragon Ball RPG!</h1>
-    </div>
-    <div class="container-fluid bg-dark rounded-bottom">
         <!-- switch to enemies available to attack after character has been chosen -->
-        <h4 class="text-white">Your Character / Enemies Available to Attack</h4>
+        <h4 class="text-white"><span class="attackerName">Your Character</span> <span id="versus">|</span> <span class="defenderName">Enemies
+                Available to Attack</span></h4>
+    </div>
+    <div id="charactersContainer" class="container-fluid py-3 bg-dark rounded-bottom">
         <div class="row">
             <div class="col-sm-3">
                 <div class="character card">
@@ -94,23 +95,33 @@
             </div>
         </div>
     </div>
-    <div class="container pt-5">
-        <div class="row bg-dark text-white">
-            <div id="attacker" class="col-sm-4 start-empty">
+    <div id="fightContainer" class="container bg-dark text-white pb-3 rounded-bottom d-none">
+        <div class="row align-items-center">
+            <div id="attacker" class="col-sm-4 thick-border-right start-empty">
             </div>
             <div class="col-sm-4 text-center align-self-center ">
-                <div id="fight" class="invisible thick-border-left thick-border-right start-invisible">
-                    <button id="attack-button" type="button" class="btn btn-outline-light start-invisible invisible">Attack</button>
-                    <button id="restart-button" type="button" class="btn btn-outline-light  start-invisible invisible">Restart</button>
+                <div class="fight" class="invisible thick-border-left thick-border-right start-invisible">
+
                     <hr class="thick-border-bottom" />
-                    <div id="attackData" class=" start-invisible invisible">
-                        <p>You attacked <span id="attackerName"></span> for <span id="attackerAttPow"></span> damage.</p>
-                        <p><span id="defenderName"></span> attacked you back for <span id="defenderAttPow"></span> damage.</p>
-                    </div>
-                    
+
+                    <h3 id="won" class="start-empty"></h3>
                 </div>
             </div>
-            <div id="defender" class="col-sm-4 start-empty">
+            <div id="defender" class="col-sm-4 thick-border-left start-empty">
+            </div>
+        </div>
+        <div class="row fight invisible start-invisible text-center pt-3 align-items-baseline">
+            <div class="col-sm-4">
+                
+                    <p id="attackerFightData" class="attackData start-invisible invisible">You attacked <span class="defenderName"></span> for <span id="attackerAttPow"></span> damage.</p>
+                  
+            </div>
+            <div class="col-sm-4">
+                <button id="attack-button" type="button" class="btn btn-outline-light start-invisible invisible">Attack</button>
+                <button id="restart-button" type="button" class="btn btn-outline-light  start-invisible invisible">Restart</button>
+            </div>
+            <div class="col-sm-4">
+                <p id="defenderFightData" class=" start-invisible invisible"><span class="defenderName"></span> attacked you back for <span id="defenderAttPow"></span> damage.</p>
             </div>
         </div>
     </div>

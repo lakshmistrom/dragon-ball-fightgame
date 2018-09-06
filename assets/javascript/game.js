@@ -1,3 +1,4 @@
+
 //initialize characters attributes
 var characters = defaultCharacters();
 
@@ -9,15 +10,15 @@ function defaultCharacters() {
             name: "Goku",
             charAttributes: {
                 //health points
-                hPoints: 150,
+                hPoints: 100,
                 //max health points
-                maxHPoints: 150,
+                maxHPoints: 100,
                 //attack power
-                attackPwr: 8,
+                attackPwr: 32,
                 //base attack power
-                baseAttackPwr: 8,
+                baseAttackPwr: 32,
                 //counter attack power
-                counterAttPwr: 8
+                counterAttPwr: 34
             },
             img: "http://webdnet.com/wp-content/uploads/2018/07/goku-1531912434329_1280w.jpg"
         },
@@ -25,15 +26,15 @@ function defaultCharacters() {
             name: "Piccolo",
             charAttributes: {
                 //health points
-                hPoints: 160,
+                hPoints: 120,
                 //max health points
-                maxHPoints: 160,
+                maxHPoints: 120,
                 //attack power
-                attackPwr: 25,
+                attackPwr: 30,
                 //base attack power
-                baseAttackPwr: 25,
+                baseAttackPwr: 30,
                 //counter attack power
-                counterAttPwr: 25
+                counterAttPwr: 32
             },
             img: "https://i.pinimg.com/originals/2f/0b/af/2f0bafeb4da7461af74e07bc76eb6638.jpg"
         },
@@ -41,15 +42,15 @@ function defaultCharacters() {
             name: "Vegeta",
             charAttributes: {
                 //health points
-                hPoints: 200,
+                hPoints: 150,
                 //max health points
-                maxHPoints: 200,
+                maxHPoints: 150,
                 //attack power
                 attackPwr: 60,
                 //base attack power
                 baseAttackPwr: 60,
                 //counter attack power
-                counterAttPwr: 45
+                counterAttPwr: 20
             },
             img: "https://img00.deviantart.net/dfd8/i/2013/131/1/e/vegeta__scouter__by_sbddbz-d573nh6.png"
         },
@@ -57,15 +58,15 @@ function defaultCharacters() {
             name: "Majin Buu",
             charAttributes: {
                 //health points
-                hPoints: 250,
+                hPoints: 180,
                 //max health points
-                maxHPoints: 250,
+                maxHPoints: 180,
                 //attack power
-                attackPwr: 70,
+                attackPwr: 40,
                 //base attack power
-                baseAttackPwr: 70,
+                baseAttackPwr: 40,
                 //counter attack power
-                counterAttPwr: 50
+                counterAttPwr: 35
             },
             img: "http://i.imgur.com/e1kKuYo.jpg"
         }
@@ -100,6 +101,10 @@ var looses = 0;
 $(document).ready(function () {
     //display all the characters to the user
     setCharacters();
+
+    //remove click handler
+    $("#attack-button").off("click");
+
     //the user clicks the attack button
     $("#attack-button").click(function () {
         console.log(attackerData);
@@ -122,9 +127,8 @@ $(document).ready(function () {
             .css("width", defProBar + "%");
 
         //set attacker data in html
-        $("#attackerName").text(defenderData.name);
         $("#attackerAttPow").text(attackerData.charAttributes.attackPwr);
-        $("#attackData").removeClass("invisible");
+        $("#attackerFightData").removeClass("invisible");
 
         //check if defender has been defeated
         if (defenderData.charAttributes.hPoints <= 0) {
@@ -137,13 +141,25 @@ $(document).ready(function () {
             //shows the character you have defeated
             $("#defender").append("<div class=\"alert alert-info\" role=\"alert\"\> You have defeated " + defenderData.name + " Please choose another character.\<\/div\>");
 
+            //display the characters to choose from again
+            //$("#charactersContainer").removeClass("d-none");
+
             //reset the defender information
             defenderCharacter = null;
             defenderData = null;
-            //$("#attackData").addClass("invisible");
+            $("#defenderFightData").addClass("invisible");
 
             //add a red x over character already chosen
             $(initDefCharacter).addClass("red-x");
+
+            //remove click handler
+            $(initDefCharacter).off("click");
+
+            //choose if attacker has won
+            if (wins === 3) {
+                $("#won").text("You have won!");
+                $("#attack-button").addClass("invisible");
+            }
 
             //choose the next character to fight against
             return;
@@ -156,8 +172,9 @@ $(document).ready(function () {
         var attProBar = (attackerData.charAttributes.hPoints / attackerData.charAttributes.maxHPoints) * 100;
 
         //set defender data in html
-        $("#defenderName").text(defenderData.name);
+        $(".defenderName").text(defenderData.name);
         $("#defenderAttPow").text(defenderData.charAttributes.attackPwr);
+        $("#defenderFightData").removeClass("invisible");
 
         //assigns the health point values to be used by the progress bar
         $(attackerCharacter).find(".progress-bar")
@@ -176,30 +193,40 @@ $(document).ready(function () {
             $("#attacker").append("<div class=\"alert alert-info\" role=\"alert\"\> You have been defeated " + attackerData.name + ".\<\/div\>");
 
             //reset the attacker information
-            attackerCharacter = null;
-            attackerData = null;
-            //$("#attackData").addClass("invisible");
+            // attackerCharacter = null;
+            // attackerData = null;
+            //$(".attackData").addClass("invisible");
 
             //add a red x over character already chosen
             $(initAttCharacter).addClass("red-x");
 
+            //remove click handler
+            $(initAttCharacter).off("click");
+
             //show restart button
             $("#restart-button").removeClass("invisible");
 
+            //display the characters to choose from again
+            //$("#charactersContainer").removeClass("d-none");
+
+            //let the user know they need to reset the game
+            $("#won").text("If you wish to play again press the Restart button.");
+
         }
     });
+    //remove click handler
+    $("#restart-button").off("click");
+
+    //resets data
     $("#restart-button").click(function () {
         //removed fight data
         $(".start-empty").empty();
 
+        //reset elements with invisible class
         $(".start-invisible").addClass("invisible");
-        
-        //initialize characters attributes back
-        characters = defaultCharacters();
 
-        //set characters html and styles back
-        setCharacters();
-
+        //reset fight container to not display
+        $("#fightContainer").addClass("d-none");
         //reset attacker
         attackerCharacter = null;
 
@@ -224,7 +251,11 @@ $(document).ready(function () {
         //reset loss count
         looses = 0;
 
-        
+        //initialize characters attributes back
+        characters = defaultCharacters();
+
+        //set characters html and styles back
+        setCharacters();
     });
 });
 function setCharacters() {
@@ -243,9 +274,9 @@ function setCharacters() {
         //handles initializing the list of characters to be shown to the user to pick from
         //initializes the first character of the array of characters to be the first character to be displayed to the user
         var character = characters[index];
-console.log(character);
-console.log(characters);
-console.log(index);
+        console.log(character);
+        console.log(characters);
+        console.log(index);
         //assigns the image to be used
         $(element).find(".card-img-top").attr("src", character.img);
         //assigns the name of the character to be used
@@ -256,12 +287,22 @@ console.log(index);
             .attr("aria-valuenow", character.charAttributes.hPoints)
             .attr("aria-value-max", character.charAttributes.hPoints);
 
+
+        //remove click handler
+        $(element).off("click");
+
         //handles the display of the characters chosen by the user in the fighting arena
         $(element).click(function () {
             //show fight section
-            $("#fight").removeClass("invisible");
+            $("#fightContainer").removeClass("d-none");
+            $(".fight").removeClass("invisible");
+
+            //remove click handler
+            $(element).off("click");
+
             //determines the attacker and defender characters
             if (attackerCharacter == null) {//set the first click to be the attacker character
+
                 //make a copy of the clicked character and set it to attack
                 attackerCharacter = $(element).clone();
 
@@ -270,6 +311,12 @@ console.log(index);
 
                 //set the data from the character
                 attackerData = character;
+
+                //switch to the current name of the character in the html
+                $(".attackerName").text(attackerData.name);
+
+                //switch | to vs.
+                $("#versus").text("vs.");
 
                 //test the data and character assigned to be the attacker console.log(attackerCharacter);
                 //move the attacker character onto the field
@@ -291,6 +338,9 @@ console.log(index);
                     //set the data from the character
                     defenderData = character;
 
+                    //switch to the current name of the character
+                    $(".defenderName").text(defenderData.name);
+
                     //if there was a defender already clear it 
                     $("#defender").empty();
 
@@ -301,14 +351,25 @@ console.log(index);
                     $(element).find(".card-body").addClass("bg-warning").removeClass("bg-dark");
                     $(element).find(".card-title").addClass("text-dark").removeClass("text-white");
 
-                    //hide attack data
-                    $("#attackData").addClass("invisible");
+                    //hide fight data
+                    $("#attackerFightData").addClass("invisible");
+                    $("#defenderFightData").addClass("invisible");
+
                 } else {//if the user clicked the character twice alert them to choose another character
                     $("#defender").append("<div class=\"alert alert-info\" role=\"alert\"\> Please choose another character.\<\/div\>");
                 }
                 //show attack button
                 $("#attack-button").removeClass("invisible");
+
+                //delay hidding characters
+                // setTimeout(function(){
+                //     $("#charactersContainer").addClass("d-none");
+                // }, 1000);
+                
             }
+
+
+
         });
         //console.log(characters[index]);
         //console.log(element);

@@ -1,4 +1,3 @@
-
 //initialize characters attributes
 var characters = defaultCharacters();
 
@@ -14,11 +13,11 @@ function defaultCharacters() {
                 //max health points
                 maxHPoints: 100,
                 //attack power
-                attackPwr: 32,
+                attackPwr: 35,
                 //base attack power
-                baseAttackPwr: 32,
+                baseAttackPwr: 35,
                 //counter attack power
-                counterAttPwr: 34
+                counterAttPwr: 40
             },
             img: "http://webdnet.com/wp-content/uploads/2018/07/goku-1531912434329_1280w.jpg"
         },
@@ -30,11 +29,11 @@ function defaultCharacters() {
                 //max health points
                 maxHPoints: 120,
                 //attack power
-                attackPwr: 30,
+                attackPwr: 40,
                 //base attack power
-                baseAttackPwr: 30,
+                baseAttackPwr: 40,
                 //counter attack power
-                counterAttPwr: 32
+                counterAttPwr: 20
             },
             img: "https://i.pinimg.com/originals/2f/0b/af/2f0bafeb4da7461af74e07bc76eb6638.jpg"
         },
@@ -50,7 +49,7 @@ function defaultCharacters() {
                 //base attack power
                 baseAttackPwr: 60,
                 //counter attack power
-                counterAttPwr: 20
+                counterAttPwr: 40
             },
             img: "https://img00.deviantart.net/dfd8/i/2013/131/1/e/vegeta__scouter__by_sbddbz-d573nh6.png"
         },
@@ -58,15 +57,15 @@ function defaultCharacters() {
             name: "Majin Buu",
             charAttributes: {
                 //health points
-                hPoints: 180,
+                hPoints: 200,
                 //max health points
-                maxHPoints: 180,
+                maxHPoints: 200,
                 //attack power
-                attackPwr: 40,
+                attackPwr: 70,
                 //base attack power
-                baseAttackPwr: 40,
+                baseAttackPwr: 70,
                 //counter attack power
-                counterAttPwr: 35
+                counterAttPwr: 80
             },
             img: "http://i.imgur.com/e1kKuYo.jpg"
         }
@@ -110,7 +109,6 @@ $(document).ready(function () {
         console.log(attackerData);
         console.log(defenderData);
 
-
         //the attacker wounds the defender using their attack power and it turn reduce the defenders health points
         defenderData.charAttributes.hPoints -= attackerData.charAttributes.attackPwr;
 
@@ -139,11 +137,19 @@ $(document).ready(function () {
             $("#defender").empty();
 
             //shows the character you have defeated
-            $("#defender").append("<div class=\"alert alert-info\" role=\"alert\"\> You have defeated " + defenderData.name + " Please choose another character.\<\/div\>");
+            $("#defender").append("<div class=\"alert alert-info\" role=\"alert\"\> You have defeated " + defenderData.name + ". Please choose another character.\<\/div\>");
 
-            //display the characters to choose from again
-            //$("#charactersContainer").removeClass("d-none");
-
+            //choose if attacker has won
+            if (wins === 3) {
+                //lets the user they won
+                $("#won").text("You have won! Game Over.");
+                //hides the attack button
+                $("#attack-button").addClass("invisible");
+                //removes alert that indicates to the user to choose another character after the defender character was just defeated
+                $("div").remove(".alert");
+                //shows the last defender that was fought
+                $("#defender").append("<div class=\"alert alert-info\" role=\"alert\"\> You have defeated " + defenderData.name + ".\<\/div\>");
+            }
             //reset the defender information
             defenderCharacter = null;
             defenderData = null;
@@ -154,12 +160,6 @@ $(document).ready(function () {
 
             //remove click handler
             $(initDefCharacter).off("click");
-
-            //choose if attacker has won
-            if (wins === 3) {
-                $("#won").text("You have won!");
-                $("#attack-button").addClass("invisible");
-            }
 
             //choose the next character to fight against
             return;
@@ -192,11 +192,6 @@ $(document).ready(function () {
             //shows that you have been defeated
             $("#attacker").append("<div class=\"alert alert-info\" role=\"alert\"\> You have been defeated " + attackerData.name + ".\<\/div\>");
 
-            //reset the attacker information
-            // attackerCharacter = null;
-            // attackerData = null;
-            //$(".attackData").addClass("invisible");
-
             //add a red x over character already chosen
             $(initAttCharacter).addClass("red-x");
 
@@ -205,9 +200,6 @@ $(document).ready(function () {
 
             //show restart button
             $("#restart-button").removeClass("invisible");
-
-            //display the characters to choose from again
-            //$("#charactersContainer").removeClass("d-none");
 
             //let the user know they need to reset the game
             $("#won").text("If you wish to play again press the Restart button.");
@@ -318,7 +310,6 @@ function setCharacters() {
                 //switch | to vs.
                 $("#versus").text("vs.");
 
-                //test the data and character assigned to be the attacker console.log(attackerCharacter);
                 //move the attacker character onto the field
                 $("#attacker").append(attackerCharacter);
 
@@ -360,18 +351,7 @@ function setCharacters() {
                 }
                 //show attack button
                 $("#attack-button").removeClass("invisible");
-
-                //delay hidding characters
-                // setTimeout(function(){
-                //     $("#charactersContainer").addClass("d-none");
-                // }, 1000);
-                
             }
-
-
-
         });
-        //console.log(characters[index]);
-        //console.log(element);
     });
 }

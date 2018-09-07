@@ -142,13 +142,19 @@ $(document).ready(function () {
             //choose if attacker has won
             if (wins === 3) {
                 //lets the user they won
-                $("#won").text("You have won! Game Over.");
+                $("#won").text("You have won! If you wish to play again press the Restart button.");
                 //hides the attack button
                 $("#attack-button").addClass("invisible");
                 //removes alert that indicates to the user to choose another character after the defender character was just defeated
                 $("div").remove(".alert");
                 //shows the last defender that was fought
                 $("#defender").append("<div class=\"alert alert-info\" role=\"alert\"\> You have defeated " + defenderData.name + ".\<\/div\>");
+                
+                //remove click handler
+            $(initAttCharacter).off("click");
+
+            //show restart button
+            $("#restart-button").removeClass("invisible");
             }
             //reset the defender information
             defenderCharacter = null;

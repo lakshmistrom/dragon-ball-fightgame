@@ -1,6 +1,4 @@
-# unit-4-game
-
-The Dragon Ball Z RPG! game
+# The Dragon Ball Z RPG! game
 
 To play the game:
 1. Choose one of the Characters displayed on the screen to represent you in the fight.
